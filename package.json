@@ -1,0 +1,23 @@
+{
+  "name": "quickstock-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "QUICKSTOCK AI - Demand Forecasting and Inventory Recommendation for Quick-Commerce Dark Stores",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\" \"npm run dev:ml\"",
+    "dev:api": "npm --workspace=@quickstock/api run dev",
+    "dev:web": "npm --workspace=@quickstock/web run dev",
+    "dev:ml": "cd services/ml && ./venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload",
+    "build": "npm --workspace=@quickstock/shared run build && npm --workspace=@quickstock/api run build && npm --workspace=@quickstock/web run build",
+    "test:ml": "cd services/ml && ./venv/bin/pytest -v",
+    "test:api": "npm --workspace=@quickstock/api run test",
+    "seed": "npm --workspace=@quickstock/api run seed"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

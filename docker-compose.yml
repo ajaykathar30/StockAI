@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: quickstock-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: quickstock_ai
+    networks:
+      - quickstock-net
+
+  ml-service:
+    build:
+      context: .
+      dockerfile: services/ml/Dockerfile
+    container_name: quickstock-ml-service
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - ML_SERVICE_TOKEN=qs-internal-auth-token-quickstock-secure-key-2026
+      - ARTIFACT_DIR=/app/artifacts
+      - DATA_DIR=/app/data
+    volumes:
+      - ./artifacts:/app/artifacts
+      - ./data:/app/data
+    networks:
+      - quickstock-net
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: quickstock-api
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    environment:
+      - API_PORT=5001
+      - NODE_ENV=production
+      - CLIENT_ORIGIN=http://localhost:5173
+      - SESSION_SECRET=super-secret-jwt-session-key-change-in-production-min-32-chars
+      - MONGODB_URI=mongodb://mongodb:27017/quickstock_ai
+      - MONGODB_DB_NAME=quickstock_ai
+      - ML_SERVICE_URL=http://ml-service:8000
+      - ML_SERVICE_TOKEN=qs-internal-auth-token-quickstock-secure-key-2026
+      - ARTIFACT_DIR=/app/artifacts
+      - DATA_DIR=/app/data
+      - DEMO_MODE=true
+    volumes:
+      - ./artifacts:/app/artifacts
+      - ./data:/app/data
+    depends_on:
+      - mongodb
+      - ml-service
+    networks:
+      - quickstock-net
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: quickstock-web
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
+    networks:
+      - quickstock-net
+
+networks:
+  quickstock-net:
+    driver: bridge
+
+volumes:
+  mongo_data:
