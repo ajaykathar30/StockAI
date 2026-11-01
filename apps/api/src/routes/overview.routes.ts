@@ -18,17 +18,36 @@ router.get('/stats', async (req: Request, res: Response) => {
       storeProducts = await StoreProduct.find();
     }
 
-    const activeModel = dataset
-      ? (await ModelRun.findOne({ datasetId: dataset._id, isActive: true }) || await ModelRun.findOne({ datasetId: dataset._id }).sort({ createdAt: -1 }))
-      : (await ModelRun.findOne({ isActive: true }) || await ModelRun.findOne().sort({ createdAt: -1 }));
+    let activeModel = null;
+    if (dataset) {
+      activeModel = await ModelRun.findOne({ datasetId: dataset._id, isActive: true })
+        || await ModelRun.findOne({ datasetId: dataset._id }).sort({ createdAt: -1 });
+    }
+    if (!activeModel) {
+      activeModel = await ModelRun.findOne({ isActive: true }) || await ModelRun.findOne().sort({ createdAt: -1 });
+    }
 
-    const latestForecast = dataset
-      ? await ForecastRun.findOne({ datasetId: dataset._id }).sort({ createdAt: -1 })
-      : await ForecastRun.findOne().sort({ createdAt: -1 });
+    let latestForecast = null;
+    if (dataset) {
+      latestForecast = await ForecastRun.findOne({ datasetId: dataset._id }).sort({ createdAt: -1 });
+      if (!latestForecast && activeModel?.datasetId) {
+        latestForecast = await ForecastRun.findOne({ datasetId: activeModel.datasetId }).sort({ createdAt: -1 });
+      }
+    }
+    if (!latestForecast) {
+      latestForecast = await ForecastRun.findOne().sort({ createdAt: -1 });
+    }
 
-    const latestPlan = dataset
-      ? await PurchasePlan.findOne({ datasetId: dataset._id }).sort({ createdAt: -1 })
-      : await PurchasePlan.findOne().sort({ createdAt: -1 });
+    let latestPlan = null;
+    if (dataset) {
+      latestPlan = await PurchasePlan.findOne({ datasetId: dataset._id }).sort({ createdAt: -1 });
+      if (!latestPlan && activeModel?.datasetId) {
+        latestPlan = await PurchasePlan.findOne({ datasetId: activeModel.datasetId }).sort({ createdAt: -1 });
+      }
+    }
+    if (!latestPlan) {
+      latestPlan = await PurchasePlan.findOne().sort({ createdAt: -1 });
+    }
 
     const totalStores = new Set(storeProducts.map(sp => sp.store_id)).size;
     const totalProducts = new Set(storeProducts.map(sp => sp.product_id)).size;
@@ -45,7 +64,10 @@ router.get('/stats', async (req: Request, res: Response) => {
       }
     }
 
-    const forecastUnits7d = latestForecast?.summary?.totalForecastUnits || 0;
+    const forecastUnits7d = Math.round(
+      latestForecast?.summary?.totalForecastUnits ??
+      (latestForecast?.forecasts?.reduce((acc: number, f: any) => acc + (f.predicted_mean || 0), 0) || 0)
+    );
 
     res.json({
       success: true,

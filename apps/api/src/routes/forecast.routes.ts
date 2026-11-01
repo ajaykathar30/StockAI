@@ -64,7 +64,7 @@ router.post('/run', async (req: Request, res: Response) => {
       return res.status(400).json({ success: false, error: 'No trained model available. Please train a model in Model Lab first.' });
     }
 
-    const dataset = await Dataset.findById(modelRun.datasetId) || await Dataset.findOne({ isActive: true });
+    const dataset = await Dataset.findOne({ isActive: true }) || await Dataset.findById(modelRun.datasetId);
     if (!dataset) {
       return res.status(400).json({ success: false, error: 'Dataset not found.' });
     }
