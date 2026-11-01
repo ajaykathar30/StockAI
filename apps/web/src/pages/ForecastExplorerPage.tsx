@@ -71,8 +71,20 @@ export const ForecastExplorerPage: React.FC = () => {
     }
   });
 
-  const stores = catalogData?.filterOptions?.stores || ['DS_BLR_KORAMANGALA', 'DS_MUM_ANDHERI', 'DS_DEL_INDIRAPURAM'];
+  const stores = catalogData?.filterOptions?.stores || [];
   const products = Array.from(new Set((catalogData?.items || []).map((i: any) => i.product_id))) as string[];
+
+  React.useEffect(() => {
+    if (stores.length > 0 && !stores.includes(selectedStore)) {
+      setSelectedStore(stores[0]);
+    }
+  }, [stores, selectedStore]);
+
+  React.useEffect(() => {
+    if (products.length > 0 && !products.includes(selectedProduct)) {
+      setSelectedProduct(products[0]);
+    }
+  }, [products, selectedProduct]);
 
   // Format chart data
   const rawPoints = forecastData?.forecasts || [];

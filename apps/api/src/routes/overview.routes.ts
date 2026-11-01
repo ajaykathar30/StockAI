@@ -10,10 +10,25 @@ const router = Router();
 router.get('/stats', async (req: Request, res: Response) => {
   try {
     const dataset = await Dataset.findOne({ isActive: true }) || await Dataset.findOne().sort({ createdAt: -1 });
-    const storeProducts = await StoreProduct.find();
-    const activeModel = await ModelRun.findOne({ isActive: true }) || await ModelRun.findOne().sort({ createdAt: -1 });
-    const latestForecast = await ForecastRun.findOne().sort({ createdAt: -1 });
-    const latestPlan = await PurchasePlan.findOne().sort({ createdAt: -1 });
+    let storeProducts: any[] = [];
+    if (dataset) {
+      storeProducts = await StoreProduct.find({ datasetId: dataset._id });
+    }
+    if (!storeProducts.length) {
+      storeProducts = await StoreProduct.find();
+    }
+
+    const activeModel = dataset
+      ? (await ModelRun.findOne({ datasetId: dataset._id, isActive: true }) || await ModelRun.findOne({ datasetId: dataset._id }).sort({ createdAt: -1 }))
+      : (await ModelRun.findOne({ isActive: true }) || await ModelRun.findOne().sort({ createdAt: -1 }));
+
+    const latestForecast = dataset
+      ? await ForecastRun.findOne({ datasetId: dataset._id }).sort({ createdAt: -1 })
+      : await ForecastRun.findOne().sort({ createdAt: -1 });
+
+    const latestPlan = dataset
+      ? await PurchasePlan.findOne({ datasetId: dataset._id }).sort({ createdAt: -1 })
+      : await PurchasePlan.findOne().sort({ createdAt: -1 });
 
     const totalStores = new Set(storeProducts.map(sp => sp.store_id)).size;
     const totalProducts = new Set(storeProducts.map(sp => sp.product_id)).size;

@@ -9,7 +9,15 @@ router.get('/', async (req: Request, res: Response) => {
   try {
     const { storeId, category, search, page = '1', limit = '50' } = req.query;
 
+    const activeDataset = await Dataset.findOne({ isActive: true });
     const query: any = {};
+    if (activeDataset) {
+      const hasDatasetItems = await StoreProduct.exists({ datasetId: activeDataset._id });
+      if (hasDatasetItems) {
+        query.datasetId = activeDataset._id;
+      }
+    }
+
     if (storeId && storeId !== 'ALL') query.store_id = storeId;
     if (category && category !== 'ALL') query.category = category;
     if (search) {
@@ -30,10 +38,11 @@ router.get('/', async (req: Request, res: Response) => {
       StoreProduct.countDocuments(query)
     ]);
 
-    // Unique stores and categories for dropdowns
+    // Unique stores and categories for dropdowns strictly for this dataset
+    const baseQuery = query.datasetId ? { datasetId: query.datasetId } : {};
     const [stores, categories] = await Promise.all([
-      StoreProduct.distinct('store_id'),
-      StoreProduct.distinct('category')
+      StoreProduct.distinct('store_id', baseQuery),
+      StoreProduct.distinct('category', baseQuery)
     ]);
 
     res.json({

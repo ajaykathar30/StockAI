@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { StoreProduct } from '../models/StoreProduct';
 import { ForecastRun } from '../models/ForecastRun';
 import { PurchasePlan } from '../models/PurchasePlan';
+import { Dataset } from '../models/Dataset';
 import { mlClient } from '../services/mlClient';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -12,7 +13,13 @@ router.post('/generate', async (req: Request, res: Response) => {
   try {
     const { storeId, category, warehouseCapacityLimit, procurementBudgetLimit } = req.body;
 
+    const activeDataset = await Dataset.findOne({ isActive: true });
     const query: any = {};
+    if (activeDataset) {
+      const hasDatasetItems = await StoreProduct.exists({ datasetId: activeDataset._id });
+      if (hasDatasetItems) query.datasetId = activeDataset._id;
+    }
+
     if (storeId && storeId !== 'ALL') query.store_id = storeId;
     if (category && category !== 'ALL') query.category = category;
 
@@ -22,7 +29,12 @@ router.post('/generate', async (req: Request, res: Response) => {
     }
 
     // Get latest forecast run
-    const latestForecast = await ForecastRun.findOne().sort({ createdAt: -1 });
+    let fcQuery: any = {};
+    if (activeDataset) {
+      const hasDatasetFc = await ForecastRun.exists({ datasetId: activeDataset._id });
+      if (hasDatasetFc) fcQuery.datasetId = activeDataset._id;
+    }
+    const latestForecast = await ForecastRun.findOne(fcQuery).sort({ createdAt: -1 });
     const forecastsBySeries: Record<string, any[]> = {};
 
     if (latestForecast) {

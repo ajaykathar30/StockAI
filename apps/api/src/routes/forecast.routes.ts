@@ -13,7 +13,14 @@ router.get('/latest', async (req: Request, res: Response) => {
   try {
     const { storeId, productId, horizonDays } = req.query;
 
+    const activeDataset = await Dataset.findOne({ isActive: true });
     let query: any = {};
+    if (activeDataset) {
+      const hasDatasetFc = await ForecastRun.exists({ datasetId: activeDataset._id });
+      if (hasDatasetFc) {
+        query.datasetId = activeDataset._id;
+      }
+    }
     if (horizonDays) query.horizonDays = parseInt(horizonDays as string, 10);
 
     const latestRun = await ForecastRun.findOne(query).sort({ createdAt: -1 });
