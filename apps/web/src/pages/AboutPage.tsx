@@ -5,7 +5,6 @@ import {
   Layers,
   AlertTriangle,
   ExternalLink,
-  ShieldAlert,
   Code
 } from 'lucide-react';
 
@@ -23,9 +22,9 @@ export const AboutPage: React.FC = () => {
     <div className="p-6 space-y-6 max-w-7xl mx-auto">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Settings & Academic Documentation</h2>
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Settings & About</h2>
         <p className="text-xs text-slate-500 mt-1">
-          System architecture, research methodology, academic boundaries, and project team attributions.
+          System architecture, research methodology, and project team attributions.
         </p>
       </div>
 
@@ -44,32 +43,6 @@ export const AboutPage: React.FC = () => {
               <div className="text-xs text-slate-500 mt-2">{m.role}</div>
             </div>
           ))}
-        </div>
-      </div>
-
-      {/* Academic Boundaries & Disclaimers */}
-      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
-        <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-          <ShieldAlert className="w-5 h-5 text-amber-600" />
-          <h3 className="font-bold text-base text-slate-900">Academic Prototype Scope & Limitations</h3>
-        </div>
-
-        <div className="text-xs text-slate-600 space-y-3 leading-relaxed">
-          <p>
-            <strong>1. Academic Inventory Decision-Support Prototype:</strong> This software is engineered strictly as an educational and academic prototype exploring inventory decision-support algorithms. It is not affiliated with, endorsed by, or integrated with commercial quick-commerce operators (e.g., Blinkit or Zepto).
-          </p>
-          <p>
-            <strong>2. Synthetic Data & Censoring Limitations:</strong> The primary dataset and demo generators are synthetic. Documented historical sales reflect stockout censoring; observed sales are not assumed to equal unconstrained customer demand during historical stock-out events.
-          </p>
-          <p>
-            <strong>3. Daily Forecasting Frequency:</strong> Models operate on daily aggregations. In keeping with empirical academic integrity, no synthetic hourly records or shift-level claims are fabricated.
-          </p>
-          <p>
-            <strong>4. Local Planning Records:</strong> Generated purchase recommendations and approvals represent internal planning records only. No external purchase orders, EDI transmissions, or supplier API communications occur.
-          </p>
-          <p>
-            <strong>5. Prediction Intervals:</strong> Uncertainty bands are computed using empirical conformal residual quantiles on validation splits. They do not constitute asymptotic or guaranteed theoretical confidence intervals.
-          </p>
         </div>
       </div>
 

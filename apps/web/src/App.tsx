@@ -3,7 +3,6 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Sidebar } from './components/layout/Sidebar';
 import { Header } from './components/layout/Header';
-import { AcademicNoticeBanner } from './components/layout/AcademicNoticeBanner';
 
 import { OverviewPage } from './pages/OverviewPage';
 import { DatasetManagerPage } from './pages/DatasetManagerPage';
@@ -26,7 +25,7 @@ const PAGE_METADATA: Record<string, { title: string; subtitle: string }> = {
   '/models': { title: 'Model Lab & Benchmarks', subtitle: 'Chronological evaluation comparing rule-based baselines with LightGBM and XGBoost' },
   '/simulation': { title: 'Simulation Lab', subtitle: 'Discrete-event inventory backtesting and policy cost comparison' },
   '/reports': { title: 'Reports & Data Exports', subtitle: 'ReportLab PDF executive summaries and formula-escaped CSV datasets' },
-  '/about': { title: 'Academic Documentation & Team', subtitle: 'Methodological boundaries, system architecture, and student team credits' },
+  '/about': { title: 'Settings & About', subtitle: 'System architecture, methodology, and project team credits' },
 };
 
 export const App: React.FC = () => {
@@ -40,9 +39,6 @@ export const App: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-slate-50 text-slate-900 font-sans">
-      {/* Top Academic Disclaimer Ribbon */}
-      <AcademicNoticeBanner />
-
       <div className="flex flex-1 overflow-hidden">
         {/* Persistent Sidebar */}
         <Sidebar />

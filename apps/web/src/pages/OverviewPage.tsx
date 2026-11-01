@@ -56,7 +56,7 @@ export const OverviewPage: React.FC = () => {
         <div className="relative z-10 max-w-3xl">
           <div className="flex items-center gap-2 mb-2">
             <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-400/20 text-teal-200 border border-teal-400/30">
-              Academic Decision-Support Prototype
+              Decision-Support System
             </span>
             {stats.dataset?.isSynthetic && (
               <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-400/20 text-amber-300 border border-amber-400/30">

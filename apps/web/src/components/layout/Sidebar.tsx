@@ -68,17 +68,11 @@ export const Sidebar: React.FC = () => {
         })}
       </nav>
 
-      {/* Academic Disclaimer Footer */}
-      <div className="p-4 border-t border-slate-800 bg-slate-950/40 text-[11px] text-slate-500">
-        <div className="flex items-center justify-between mb-1">
-          <span className="font-semibold text-slate-400">Academic Prototype</span>
-          <span className="px-1.5 py-0.2 rounded bg-amber-950/60 text-amber-400 border border-amber-800/40 text-[10px]">
-            Simulated
-          </span>
+      <div className="p-4 border-t border-slate-800 text-[11px] text-slate-500">
+        <div className="flex items-center justify-between">
+          <span className="font-semibold text-slate-400">QuickStock AI</span>
+          <span className="text-[10px] text-teal-400 font-mono">v1.0.0</span>
         </div>
-        <p className="leading-tight text-slate-400">
-          Indian Institute of Information Technology
-        </p>
       </div>
     </aside>
   );

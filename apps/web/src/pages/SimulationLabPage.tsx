@@ -267,7 +267,7 @@ export const SimulationLabPage: React.FC = () => {
         <Info className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
         <p className="leading-relaxed">
           {simulation?.limitationsDisclaimer || (
-            "Academic inventory decision-support prototype. Simulated outcomes are synthetic replays. Observed-sales replay is an operational proxy and does not reconstruct unobserved latent demand during historical stock-outs."
+            "Backtesting simulation results are generated using historical sales as an operational replay to evaluate policy trade-offs."
           )}
         </p>
       </div>

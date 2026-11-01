@@ -188,3 +188,4 @@ curl -s http://localhost:5173/api/overview/stats
 | `No module named 'fastapi'` or Python errors | Python dependencies were not installed into `./venv`. | Re-run `cd services/ml && ./venv/bin/pip install -r requirements.txt` |
 | `Cannot find module '@quickstock/shared'` | Shared package was not built. | Run `npm --workspace=@quickstock/shared run build` |
 | `sh: concurrently: command not found` | Root dependencies not installed. | Run `npm install` in the repository root. |
+

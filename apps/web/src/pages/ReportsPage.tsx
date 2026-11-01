@@ -39,7 +39,7 @@ export const ReportsPage: React.FC = () => {
             <div className="w-10 h-10 rounded-lg bg-teal-50 text-teal-700 flex items-center justify-center mb-4">
               <FileText className="w-5 h-5" />
             </div>
-            <h3 className="font-bold text-base text-slate-900 mb-1">Academic Executive PDF</h3>
+            <h3 className="font-bold text-base text-slate-900 mb-1">Executive Summary PDF</h3>
             <p className="text-xs text-slate-600 mb-4 leading-relaxed">
               Publication-grade PDF summary generated using ReportLab in Python. Includes model leaderboard metrics, dataset provenance, replenishment schedule, and team attributions.
             </p>

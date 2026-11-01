@@ -418,7 +418,7 @@ export const ReplenishmentPlannerPage: React.FC = () => {
               Are you sure you want to approve this replenishment plan?
             </p>
             <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-900">
-              <strong>Notice:</strong> In this academic prototype, approval creates local planning records in MongoDB. No external purchase order or supplier transmission occurs.
+              <strong>Notice:</strong> Plan approval creates active planning records in MongoDB and commits replenishment allocations.
             </div>
 
             <div className="flex items-center justify-end gap-3 pt-2">
