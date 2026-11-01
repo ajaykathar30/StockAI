@@ -123,3 +123,10 @@ class FeaturePipeline:
         cols_to_keep.extend([c for c in feature_cols if c in df_feat.columns])
 
         return df_feat[cols_to_keep].copy()
+
+
+
+
+
+
+

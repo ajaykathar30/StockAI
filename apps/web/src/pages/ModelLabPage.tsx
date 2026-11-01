@@ -30,10 +30,7 @@ import {
 const ALGORITHM_OPTIONS = [
   { value: 'lightgbm', label: 'LightGBM Regressor (Core ML)', type: 'ml' },
   { value: 'xgboost', label: 'XGBoost Regressor (Core ML)', type: 'ml' },
-  { value: 'random_forest', label: 'Random Forest Regressor', type: 'ml' },
-  { value: 'seasonal_naive', label: 'Seasonal Naive (7-Day Last Week)', type: 'baseline' },
-  { value: 'trailing_7d_mean', label: 'Trailing 7-Day Rolling Mean', type: 'baseline' },
-  { value: 'previous_day_naive', label: 'Previous-Day Naive (Lag-1)', type: 'baseline' }
+  { value: 'random_forest', label: 'Random Forest Regressor', type: 'ml' }
 ];
 
 export const ModelLabPage: React.FC = () => {
